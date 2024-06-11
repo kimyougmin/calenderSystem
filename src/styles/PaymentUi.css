@@ -1,0 +1,7 @@
+.payment-none {
+    border: 1px solid rgb(221, 221, 221);
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
+    height: 30vh;
+}
