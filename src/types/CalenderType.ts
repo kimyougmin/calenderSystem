@@ -3,4 +3,5 @@ export default interface CalenderType {
     setIsModal:(isModel: boolean) => void
     checkIn: number[]
     checkOut: number[]
+    count: number
 }
