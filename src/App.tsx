@@ -2,11 +2,8 @@ import React, {useEffect} from 'react';
 import './App.css';
 import PaymentUi from "./components/PaymentUi";
 import {useCookies} from "react-cookie";
-import CalenderType from "./types/CalenderType";
-import CurrentDay from "./utils/CurrentDay";
-import TestModelReservedData from "./TextModel/TestModelReservedData";
-import CalenderObject from "./utils/CalenderObject";
-import NextMont from "./utils/NextMonth";
+import {CalenderContext} from "./useContext/CalenderContext";
+import CalenderInit from "./utils/CalenderInit";
 
 function App() {
     const [cookies, setCookies, removeCookie] = useCookies(['calenderDate']);
@@ -34,7 +31,9 @@ function App() {
 
                 </div>
                 <div className='app-payment'>
-                    <PaymentUi/>
+                    <CalenderContext.Provider value={CalenderInit}>
+                        <PaymentUi/>
+                    </CalenderContext.Provider>
                 </div>
             </div>
         </div>
