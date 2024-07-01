@@ -20,7 +20,6 @@ function App() {
             setCookies('calenderDate', { isModal: cookies.calenderDate.isModal })
         }
     },[]);
-
     return (
         <div className='app' >
             <div className='app-images'>

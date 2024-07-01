@@ -53,7 +53,7 @@ const CalenderInit = (): CalenderType => {
 
     return {
         isModal: false,
-        setIsModal: (isModal: boolean): void => {},
+        setIsModal: (isModel: boolean): void => {},
         checkIn: checkIn,
         checkOut: checkOut,
         count: count? 2 : 0

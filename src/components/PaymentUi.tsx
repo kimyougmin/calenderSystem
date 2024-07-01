@@ -1,62 +1,61 @@
 import React from 'react';
 import CurrentDay from "../utils/CurrentDay";
-import CalenderDate from "./CalenderDate";
-import '../styles/PaymentUi.css'
+import '../styles/PaymentUi.css';
+import CalenderModal from "./CalenderModal";
+import {CalenderContext} from "../useContext/CalenderContext";
+
 
 function PaymentUi() {
-    const [modal, setModal] = React.useState(false);
+    const {isModal, setIsModal, checkIn, checkOut, count} = React.useContext(CalenderContext);
+    const [isModalControl, setIsModalControl] = React.useState(isModal);
     const modalRef = React.useRef<HTMLDivElement>(null);
     const [reservationInformation, setReservationInformation] = React.useState({
         dayPrice: 0,
-        checkIn: CurrentDay(),
-        checkOut: {year: 0, month: 0, day: 0}
+        checkIn: checkIn,
+        checkOut: checkOut
     });
+
     React.useEffect(() => {
         dummyModule();
-    },[])
-    const closeModal = (e : React.MouseEvent<HTMLButtonElement>) => {
-        e.stopPropagation();
-        setModal(true);
-    }
+    }, []);
+
     const dummyModule = () => {
         setReservationInformation({
             dayPrice: 90000,
-            checkIn: reservationInformation.checkIn,
-            checkOut: reservationInformation.checkOut
+            checkIn,
+            checkOut,
         });
-    }
+    };
     const onClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
-        const target = e.target as HTMLDivElement;
         const refCurrent = modalRef.current as HTMLDivElement;
         if (!refCurrent) {
             return null;
         }
-        if (target.className === 'calender-modal' && refCurrent.className === 'modal-box') {
-            return null;
-        }
-        setModal(false);
+    }
+    const onOpenModal = () => {
+        setIsModalControl(true);
     }
     return (
         <div className='payment-none' onClick={(e => onClickHandler(e))}>
-            <div style={{display:'flex'}}>
-                <h2>₩{reservationInformation.dayPrice} </h2>
+            <div className={'payment-header'}>
+                <p>₩{reservationInformation.dayPrice * count} </p>
                 <p>/박</p>
             </div>
-            <div style={{display:'flex'}}>
-                <div>
+            <div style={{display: 'flex'}}>
+                <div onClick={onOpenModal}>
                     <p>check-in</p>
-                    <p>{reservationInformation.checkIn.year}. {reservationInformation.checkIn.month}. {reservationInformation.checkIn.date}.</p>
+                    <p>{checkIn[0]}. {checkIn[1]}. {checkIn[2]}.</p>
                 </div>
-                <div>
+                <div onClick={onOpenModal}>
                     <p>check-out</p>
-                    <p>날짜를 선택해주세요</p>
+                    <p>{checkOut[0]}. {checkOut[1]}. {checkOut[2]}.</p>
                 </div>
             </div>
-            <button onClick={(e) => closeModal(e)}>Open Modal</button>
-            {modal ?
+            {isModalControl ?
                 <div ref={modalRef} className='modal-box'>
-                    <CalenderDate/>
+                    <button onClick={() => {setIsModalControl(false)}}>close</button>
+                    <CalenderModal/>
                 </div> : null}
         </div>
     )
