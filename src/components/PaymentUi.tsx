@@ -127,11 +127,13 @@ function PaymentUi() {
             </div>
             {isModal ?
                 <div className='modal-box'>
-                    <button onClick={() => {
-                        setIsModal(false)
-                    }}>close
-                    </button>
                     <CalenderModal/>
+                    <div>
+                        <button onClick={() => {
+                            setIsModal(false)
+                        }}>close
+                        </button>
+                    </div>
                 </div> : null}
         </div>
     )

@@ -6,7 +6,7 @@ interface props {
     month: number
     reservation: number[]
 }
-enum DAY{
+export enum DAY{
     SUNDAY,
     MONDAY,
     TUESDAY,
