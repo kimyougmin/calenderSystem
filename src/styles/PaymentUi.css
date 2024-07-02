@@ -5,7 +5,7 @@
     border: 1px solid rgb(221, 221, 221);
     border-radius: 12px;
     width: 316px;
-    height: 30vh;
+    height: 35vh;
     padding: 24px;
     box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
 }
@@ -32,12 +32,69 @@
     border: 1px solid rgb(221, 221, 221);
     border-radius: 12px;
 }
-.selector-day{
+.selector-day {
     display: flex;
     justify-content: space-between;
 }
 .selector-day > div {
     width: 50%;
-    height: 7vh;
+    height: 5vh;
+    padding: 1vh 0 0 10px;
+    line-height: 18px;
     border-bottom: 1px solid rgb(221, 221, 221);
+}
+.selector-day > div:nth-of-type(2) {
+    border-left: 1px solid rgb(221, 221, 221);
+}
+.selector-day > div > p:nth-of-type(1) {
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+.selector-day > div > p:nth-of-type(2) {
+    font-size: 16px;
+}
+.selector-person {
+    display: flex;
+    justify-content: space-between;
+}
+.selector-person > div {
+    height: 5vh;
+    line-height: 18px;
+    padding: 1vh 0 0 10px;
+}
+.selector-person > div > p:nth-of-type(1) {
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+.selector-person > div > p:nth-of-type(2) {
+    font-size: 16px;
+}
+.payment-footer {
+    padding: 2vh 0 2vh 0;
+}
+.payment-footer > button {
+    width: 100%;
+    height: 5vh;
+}
+.person-icon {
+    margin: auto 10px 10px 0;
+    transform: rotate(-90deg);
+}
+.payment-footer > span {
+    display: flex;
+    justify-content: space-between;
+    margin: 2vh 0 0.5vh 0;
+}
+.payment-footer > span > p {
+    font-size: 16px;
+}
+.payment-footer > span:nth-of-type(3) {
+    padding-top: 2vh;
+    border-top: 1px solid rgb(221, 221, 221);;
+    font-size: 16px;
+    font-weight: bold;
+}
+.payment-footer > span:nth-of-type(3) > p {
+    font-size: 16px;
+    font-weight: bold;
 }

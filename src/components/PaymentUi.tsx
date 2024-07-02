@@ -2,7 +2,8 @@ import React from 'react';
 import '../styles/PaymentUi.css';
 import CalenderModal from "./CalenderModal";
 import {calenderContext} from "../useContext/CalenderContext";
-
+import {Button} from "@mui/material";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 function PaymentUi() {
     const {isModal, setIsModal, checkIn, checkOut, count} = React.useContext(calenderContext);
@@ -10,7 +11,8 @@ function PaymentUi() {
     const [reservationInformation, setReservationInformation] = React.useState({
         dayPrice: 0,
         checkIn: checkIn,
-        checkOut: checkOut
+        checkOut: checkOut,
+        cleaningFee: 0
     });
 
     React.useEffect(() => {
@@ -22,6 +24,7 @@ function PaymentUi() {
             dayPrice: 90000,
             checkIn,
             checkOut,
+            cleaningFee: 20000
         });
     };
     const onClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -37,7 +40,7 @@ function PaymentUi() {
     return (
         <div className='payment-none' onClick={(e => onClickHandler(e))}>
             <div className={'payment-header'}>
-                <p>₩{reservationInformation.dayPrice * count} </p>
+                <p>₩{reservationInformation.dayPrice.toLocaleString()} </p>
                 <p>/박</p>
             </div>
             <div className={'payment-selector'}>
@@ -56,8 +59,29 @@ function PaymentUi() {
                         <p>인원</p>
                         <p>게스트 1인 </p>
                     </div>
-
+                    <ArrowBackIosIcon className={'person-icon'}/>
                 </div>
+            </div>
+            <div className={'payment-footer'}>
+                <Button variant="contained" disableElevation>
+                    예약하기
+                </Button>
+                <span>
+                    <p>₩{reservationInformation.dayPrice.toLocaleString()} X {count.toLocaleString()}박</p>
+                    <p>₩{(reservationInformation.dayPrice * count).toLocaleString()}</p>
+                </span>
+                {
+                    reservationInformation.cleaningFee === 0 ?
+                        null :
+                        <span>
+                            <p>청소비</p>
+                            <p>₩{reservationInformation.cleaningFee.toLocaleString()}</p>
+                        </span>
+                }
+                <span>
+                    <p>총 합계</p>
+                    <p>₩{(reservationInformation.dayPrice * count + reservationInformation.cleaningFee).toLocaleString()}</p>
+                </span>
             </div>
             {isModal ?
                 <div ref={modalRef} className='modal-box'>
