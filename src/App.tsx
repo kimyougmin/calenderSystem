@@ -2,8 +2,7 @@ import React, {useEffect} from 'react';
 import './App.css';
 import PaymentUi from "./components/PaymentUi";
 import {useCookies} from "react-cookie";
-import {CalenderContext} from "./useContext/CalenderContext";
-import CalenderInit from "./utils/CalenderInit";
+import {CalenderContextProvider} from "./useContext/CalenderContext";
 
 function App() {
     const [cookies, setCookies, removeCookie] = useCookies(['calenderDate']);
@@ -30,9 +29,9 @@ function App() {
 
                 </div>
                 <div className='app-payment'>
-                    <CalenderContext.Provider value={CalenderInit}>
+                    <CalenderContextProvider>
                         <PaymentUi/>
-                    </CalenderContext.Provider>
+                    </CalenderContextProvider>
                 </div>
             </div>
         </div>
