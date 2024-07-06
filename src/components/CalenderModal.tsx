@@ -38,32 +38,78 @@ function CalenderModal() {
         }
         return calenderDate;
     }
+
     const onBeforeBtnHandler = () => {
-        if (beforeMonth.month < 12 && beforeMonth.month > 1) {
+        if (beforeMonth.month === 1) {
+            setBeforeMonth({
+                year: beforeMonth.year - 1,
+                month: 12,
+                date: 1
+            });
+            setNextMonth({
+                year: nextMonth.year,
+                month: beforeMonth.month,
+                date: 1
+            });
+        } else if (beforeMonth.month === 12 && nextMonth.month === 1){
             setBeforeMonth({
                 year: beforeMonth.year,
                 month: beforeMonth.month - 1,
                 date: 1
-            })
+            });
             setNextMonth({
                 year: beforeMonth.year,
                 month: beforeMonth.month,
                 date: 1
-            })
+            });
+        } else {
+            setBeforeMonth({
+                year: beforeMonth.year,
+                month: beforeMonth.month - 1,
+                date: 1
+            });
+            setNextMonth({
+                year: beforeMonth.year,
+                month: beforeMonth.month,
+                date: 1
+            });
         }
     }
+
     const onNextBtnHandler = () => {
-        if (nextMonth.month < 12 && nextMonth.month > 1) {
+        if(nextMonth.month === 12) {
             setBeforeMonth({
                 year: beforeMonth.year,
                 month: nextMonth.month ,
                 date: 1
-            })
+            });
+            setNextMonth({
+                year: beforeMonth.year + 1,
+                month: 1,
+                date: 1
+            });
+        } else if (nextMonth.month === 1 && beforeMonth.month === 12) {
+            setBeforeMonth({
+                year: nextMonth.year,
+                month: nextMonth.month ,
+                date: 1
+            });
+            setNextMonth({
+                year: nextMonth.year,
+                month: nextMonth.month + 1,
+                date: 1
+            });
+        } else {
+            setBeforeMonth({
+                year: beforeMonth.year,
+                month: nextMonth.month ,
+                date: 1
+            });
             setNextMonth({
                 year: beforeMonth.year,
                 month: nextMonth.month + 1,
                 date: 1
-            })
+            });
         }
     }
     return (
@@ -75,7 +121,7 @@ function CalenderModal() {
             <div className={'modal-body'}>
                 <div className={'calenderStart'}>
                     <div className={'modalBody header'}>
-                        <ArrowBackIosIcon onClick={onBeforeBtnHandler} className={'headerBtn before'}/>
+                        {(beforeMonth.month === currentDay.month) && (beforeMonth.year === currentDay.year) ? <ArrowBackIosIcon className={'headerBtn before cannot'}/> :<ArrowBackIosIcon onClick={onBeforeBtnHandler} className={'headerBtn before'}/>}
                         <p>{beforeMonth.year}년 {beforeMonth.month}월</p>
                         <div></div>
                     </div>

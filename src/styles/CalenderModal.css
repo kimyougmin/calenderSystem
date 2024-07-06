@@ -76,6 +76,9 @@
 }
 .headerBtn.before {
     margin-left: 16px;
+}
+.headerBtn.before.cannot {
+    margin-left: 16px;
     color: rgb(221, 221, 221);
 }
 .headerBtn.next {
