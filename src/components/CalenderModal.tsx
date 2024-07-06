@@ -1,32 +1,41 @@
 import React from 'react';
 import '../styles/CalenderModal.css'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import CalenderObject, {DAY}from "../utils/CalenderObject";
+import CalenderObject from "../utils/CalenderObject";
 import CurrentDay from "../utils/CurrentDay";
 import TestModelReservedData from "../TextModel/TestModelReservedData";
+import NextMont from "../utils/NextMonth";
+import MonthDateType from "../types/MonthDateType";
 
 function CalenderModal() {
-    const currentDay = CurrentDay()
-    const reservationDate = TestModelReservedData()
-    const calenderObject = CalenderObject({year: currentDay.year, month: currentDay.month, reservation: reservationDate.CurrenMonth});
+    const currentDay = CurrentDay();
+    const nextMonth = NextMont();
+    const reservationDate = TestModelReservedData();
+    const currentCalenderObject = CalenderObject({year: currentDay.year, month: currentDay.month, reservation: reservationDate.CurrenMonth});
+    const nextCalenderObject = CalenderObject({year: nextMonth.year, month: currentDay.month, reservation: reservationDate.NextMonth});
 
-    let calenderDate = []
-    let rows = []
+    const calenderHTML = (calenderObject:MonthDateType[]) => {
+        let calenderDate = [];
+        let rows = [];
+        for(let i = 0; i <= calenderObject.length - 1; i++) {
+            if (i === 0) {
+                for (let j = 0; j < calenderObject[0].day; j++) {
+                    rows.push(<td className={`td cannot day${i + 1}`} key={`empty${j+1}`}></td>);
+                }
+            }
+            calenderObject[i].reservation === 0 ?
+                rows.push(<td className={`td cannot day${i+1}`} id={`td-day${i+1}`} key={`day${i+1}`}>{calenderObject[i].date}</td>)
+                : rows.push(<td className={`td day${i+1}`} id={`day${i+1}`} key={`td-cannot-day${i+1}`}>{calenderObject[i].date}</td>);
 
-    for(let i = 1; i <= calenderObject.length; i++) {
-        if (i % 7 === 0) {
-            calenderDate.push(<tr className={`rows`} key={`rows${calenderDate.length}`}>{rows}</tr>);
-            rows = []
-        }
-        if (i === calenderObject.length - 1) {
-            calenderDate.push(<tr className={`rows`} key={`rows${calenderDate.length}`}>{rows}</tr>);
-        }
-        if (i === 1) {
-            for (let j = 0; j < calenderObject[0].day; j++) {
-                rows.push(<td className={`td cannot day${i}`} key={`empty${j}`}></td>)
+            if (calenderObject[i].day === 6) {
+                calenderDate.push(<tr className={`rows`} key={`rows${calenderDate.length}`}>{rows}</tr>);
+                rows = []
+            }
+            if (i === calenderObject.length - 1) {
+                calenderDate.push(<tr className={`rows`} key={`rows${calenderDate.length}`}>{rows}</tr>);
             }
         }
-        calenderObject[i - 1].reservation === 0 ? rows.push(<td className={`td cannot day${i}`} id={`td-day${i}`} key={`day${i}`}>{i}</td>) : rows.push(<td className={`td day${i}`} id={`day${i}`} key={`td-cannot-day${i}`}>{i}</td>);
+        return calenderDate;
     }
     return (
         <div className='calender-modal'>
@@ -52,7 +61,7 @@ function CalenderModal() {
                             <td>금</td>
                             <td>토</td>
                         </tr>
-                        {calenderDate.map((e) => {
+                        {calenderHTML(currentCalenderObject).map((e) => {
                                 return e
                             })}
                         </tbody>
@@ -60,9 +69,9 @@ function CalenderModal() {
                 </div>
                 <div className={'calenderEnd'}>
                     <div className={'modalBody header'}>
-                        <ArrowBackIosIcon/>
-                        <p>{currentDay.year}년 {currentDay.month}월</p>
                         <div></div>
+                        <p>{nextMonth.year}년 {nextMonth.month}월</p>
+                        <ArrowBackIosIcon/>
                     </div>
                     <table className={'calender table'}>
                         <tbody>
@@ -75,7 +84,7 @@ function CalenderModal() {
                             <td>금</td>
                             <td>토</td>
                         </tr>
-                        {calenderDate.map((e) => {
+                        {calenderHTML(nextCalenderObject).map((e) => {
                             return e
                         })}
                         </tbody>
