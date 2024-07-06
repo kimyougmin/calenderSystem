@@ -9,10 +9,11 @@ import MonthDateType from "../types/MonthDateType";
 
 function CalenderModal() {
     const currentDay = CurrentDay();
-    const nextMonth = NextMont();
+    const [beforeMonth, setBeforeMonth] = React.useState(currentDay);
+    const [nextMonth, setNextMonth] = React.useState(NextMont());
     const reservationDate = TestModelReservedData();
-    const currentCalenderObject = CalenderObject({year: currentDay.year, month: currentDay.month, reservation: reservationDate.CurrenMonth});
-    const nextCalenderObject = CalenderObject({year: nextMonth.year, month: currentDay.month, reservation: reservationDate.NextMonth});
+    const currentCalenderObject = CalenderObject({year: beforeMonth.year, month: beforeMonth.month, reservation: reservationDate.CurrenMonth});
+    const nextCalenderObject = CalenderObject({year: nextMonth.year, month: nextMonth.month, reservation: reservationDate.NextMonth});
 
     const calenderHTML = (calenderObject:MonthDateType[]) => {
         let calenderDate = [];
@@ -24,7 +25,7 @@ function CalenderModal() {
                 }
             }
             calenderObject[i].reservation === 0 ?
-                rows.push(<td className={`td cannot day${i+1}`} id={`td-day${i+1}`} key={`day${i+1}`}>{calenderObject[i].date}</td>)
+                rows.push(<td className={`td cannot day${i+1}`} id={`cannot-day${i+1}`} key={`day${i+1}`}>{calenderObject[i].date}</td>)
                 : rows.push(<td className={`td day${i+1}`} id={`day${i+1}`} key={`td-cannot-day${i+1}`}>{calenderObject[i].date}</td>);
 
             if (calenderObject[i].day === 6) {
@@ -37,6 +38,34 @@ function CalenderModal() {
         }
         return calenderDate;
     }
+    const onBeforeBtnHandler = () => {
+        if (beforeMonth.month < 12 && beforeMonth.month > 1) {
+            setBeforeMonth({
+                year: beforeMonth.year,
+                month: beforeMonth.month - 1,
+                date: 1
+            })
+            setNextMonth({
+                year: beforeMonth.year,
+                month: beforeMonth.month,
+                date: 1
+            })
+        }
+    }
+    const onNextBtnHandler = () => {
+        if (nextMonth.month < 12 && nextMonth.month > 1) {
+            setBeforeMonth({
+                year: beforeMonth.year,
+                month: nextMonth.month ,
+                date: 1
+            })
+            setNextMonth({
+                year: beforeMonth.year,
+                month: nextMonth.month + 1,
+                date: 1
+            })
+        }
+    }
     return (
         <div className='calender-modal'>
             <div className={'modal-title'}>
@@ -46,8 +75,8 @@ function CalenderModal() {
             <div className={'modal-body'}>
                 <div className={'calenderStart'}>
                     <div className={'modalBody header'}>
-                        <ArrowBackIosIcon />
-                        <p>{currentDay.year}년 {currentDay.month}월</p>
+                        <ArrowBackIosIcon onClick={onBeforeBtnHandler} className={'headerBtn before'}/>
+                        <p>{beforeMonth.year}년 {beforeMonth.month}월</p>
                         <div></div>
                     </div>
                     <table className={'calender table'}>
@@ -71,7 +100,7 @@ function CalenderModal() {
                     <div className={'modalBody header'}>
                         <div></div>
                         <p>{nextMonth.year}년 {nextMonth.month}월</p>
-                        <ArrowBackIosIcon/>
+                        <ArrowBackIosIcon onClick={onNextBtnHandler} className={'headerBtn next'}/>
                     </div>
                     <table className={'calender table'}>
                         <tbody>
