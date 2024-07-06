@@ -70,3 +70,15 @@
     padding-bottom: 2px;
     text-decoration:line-through
 }
+.headerBtn {
+    width: 0.7em !important;
+    height: 0.7em !important;
+}
+.headerBtn.before {
+    margin-left: 16px;
+    color: rgb(221, 221, 221);
+}
+.headerBtn.next {
+    margin-right: 16px;
+    transform: rotate(180deg);
+}
