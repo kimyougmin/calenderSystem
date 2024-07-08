@@ -127,7 +127,7 @@ function PaymentUi() {
             </div>
             {isModal ?
                 <div className='modal-box'>
-                    <CalenderModal/>
+                    <CalenderModal isSelectDay={isSelectDay} setIsSelectDay={setIsSelectDay}/>
                     <div>
                         <button onClick={() => {
                             setIsModal(false)

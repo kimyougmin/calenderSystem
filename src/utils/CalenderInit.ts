@@ -50,12 +50,13 @@ const CalenderInit = (): CalenderType => {
             break;
         }
     }
-
     return {
         isModal: false,
-        setIsModal: (isModel: boolean): void => {},
+        setIsModal: (isModel: boolean ): void =>  {},
         checkIn: checkIn,
+        setCheckIn: (checkIn: number[]): void => {},
         checkOut: checkOut,
+        setCheckOut: (checkOut: number[]):void => {},
         count: count? 2 : 0
     }
 }
