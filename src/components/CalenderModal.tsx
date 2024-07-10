@@ -7,6 +7,7 @@ import TestModelReservedData from "../TextModel/TestModelReservedData";
 import NextMont from "../utils/NextMonth";
 import MonthDateType from "../types/MonthDateType";
 import {calenderContext} from "../useContext/CalenderContext";
+import CalenderSelectDay from "../utils/CalenderSelectDay";
 
 interface props {
     isSelectDay: boolean;
@@ -18,30 +19,30 @@ function CalenderModal({isSelectDay, setIsSelectDay}: props) {
     const [beforeMonth, setBeforeMonth] = React.useState(currentDay);
     const [nextMonth, setNextMonth] = React.useState(NextMont());
     const reservationDate = TestModelReservedData();
-    const currentCalenderObject = CalenderObject({
+    const [currentCalenderObject, setCurrentCalenderObject] = React.useState(CalenderObject({
         year: beforeMonth.year,
         month: beforeMonth.month,
         reservation: reservationDate.CurrenMonth
-    });
-    const nextCalenderObject = CalenderObject({
+    }));
+    const [nextCalenderObject, setNextCalenderObject] = React.useState(CalenderObject({
         year: nextMonth.year,
         month: nextMonth.month,
         reservation: reservationDate.NextMonth
-    });
+    }));
     const {setIsModal, checkIn, setCheckIn, checkOut, setCheckOut} = React.useContext(calenderContext);
     let isTdId = true;
 
     React.useEffect(() => {
         setIsSelectDay(true);
     }, [])
-
+    
     const onClickCalenderHandler = (e: React.MouseEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
         const getId = target.id.split(' ');
+        const calenderSelectDay = CalenderSelectDay({selectDay: Number(getId[2]), selectMonth: getId[1], currentMonth : currentCalenderObject, nextMonth: nextCalenderObject});
         if (isSelectDay) {
-            getId[1] === 'true' ?
-                setCheckIn([beforeMonth.year, beforeMonth.month, Number(getId[2])]) :
-                setCheckIn([nextMonth.year, nextMonth.month, Number(getId[2])]);
+            setCurrentCalenderObject(calenderSelectDay.leftCalender)
+            setNextCalenderObject(calenderSelectDay.rightCalender)
             setIsSelectDay(!isSelectDay)
         } else {
             getId[1] === 'true' ?
