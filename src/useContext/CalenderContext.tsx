@@ -9,10 +9,11 @@ export const isCalenderContext = React.createContext((isModal: boolean) => {});
 export function CalenderContextProvider({children}: {children: React.ReactNode}) {
     const [isModal, setIsModal] = React.useState<boolean>(false);
     const [checkIn, setCheckIn] = React.useState(calenderInit.checkIn);
-    const [checkOut, setCheckOut] = React.useState(calenderInit.checkOut)
+    const [checkOut, setCheckOut] = React.useState(calenderInit.checkOut);
+    const [count, setCount] = React.useState(calenderInit.count);
 
     return(
-        <calenderContext.Provider value={{isModal, setIsModal, checkIn, setCheckIn, checkOut, setCheckOut, count: calenderInit.count}}>
+        <calenderContext.Provider value={{isModal, setIsModal, checkIn, setCheckIn, checkOut, setCheckOut, count, setCount}}>
             <isCalenderContext.Provider  value={setIsModal}>
                 {children}
             </isCalenderContext.Provider>

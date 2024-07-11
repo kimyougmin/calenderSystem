@@ -6,4 +6,5 @@ export default interface CalenderType {
     checkOut: number[]
     setCheckOut: (checkOut: number[]) => void
     count: number
+    setCount: (count: number) => void
 }

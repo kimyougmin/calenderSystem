@@ -57,7 +57,8 @@ const CalenderInit = (): CalenderType => {
         setCheckIn: (checkIn: number[]): void => {},
         checkOut: checkOut,
         setCheckOut: (checkOut: number[]):void => {},
-        count: count? 2 : 0
+        count: count? 2 : 0,
+        setCount: (count: number) => {},
     }
 }
 
