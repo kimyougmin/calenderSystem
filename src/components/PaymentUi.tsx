@@ -7,7 +7,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import CloseIcon from '@mui/icons-material/Close';
 
 function PaymentUi() {
-    const {isModal, setIsModal, checkIn, checkOut, count} = React.useContext(calenderContext);
+    const {isModal, setIsModal, checkIn, checkOut, count, setCount} = React.useContext(calenderContext);
     const [isSelectDay, setIsSelectDay] = React.useState<boolean>(true);
     const [reservationInformation, setReservationInformation] = React.useState({
         dayPrice: 0,

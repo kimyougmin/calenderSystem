@@ -29,44 +29,72 @@ function CalenderModal({isSelectDay, setIsSelectDay}: props) {
         month: nextMonth.month,
         reservation: reservationDate.NextMonth
     }));
-    const {setIsModal, checkIn, setCheckIn, checkOut, setCheckOut} = React.useContext(calenderContext);
+    const {setIsModal, checkIn, setCheckIn, checkOut, setCheckOut, setCount} = React.useContext(calenderContext);
     let isTdId = true;
 
     React.useEffect(() => {
+        return (() =>{
+            onAccommodationDateCount();
+        });
+    }, [checkIn, checkOut])
+
+    React.useEffect(() => {
         setIsSelectDay(true);
-    }, [])
-    
+    }, []);
+
+
     const onClickCalenderHandler = (e: React.MouseEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
         const getId = target.id.split(' ');
         const calenderSelectDay = CalenderSelectDay({selectDay: Number(getId[2]), selectMonth: getId[1], currentMonth : currentCalenderObject, nextMonth: nextCalenderObject});
         if (isSelectDay) {
-            setCurrentCalenderObject(calenderSelectDay.leftCalender)
-            setNextCalenderObject(calenderSelectDay.rightCalender)
-            setIsSelectDay(!isSelectDay)
+            getId[1] === 'true' ?
+                setCheckIn([beforeMonth.year, beforeMonth.month, Number(getId[2])]) :
+                setCheckIn([nextMonth.year, nextMonth.month, Number(getId[2])]);
+            setCurrentCalenderObject(calenderSelectDay.leftCalender);
+            setNextCalenderObject(calenderSelectDay.rightCalender);
+            setIsSelectDay(!isSelectDay);
         } else {
             getId[1] === 'true' ?
                 setCheckOut([beforeMonth.year, beforeMonth.month, Number(getId[2])]) :
                 setCheckOut([nextMonth.year, nextMonth.month, Number(getId[2])]);
-            setIsModal(false)
+            setTimeout(() => {setIsModal(false)}, 16);
+        }
+    }
+
+    const onAccommodationDateCount = () => {
+        let dayCount: number = 0;
+        if (checkIn[0] === checkOut[0] && checkIn[1] === checkOut[1]) {
+            for (let i = checkIn[2]; i <= checkOut[2]; i++) {
+                dayCount++;
+            }
+            setCount(dayCount)
+        } else {
+            for (let i = checkIn[2]; i <= currentCalenderObject.length; i++) {
+                dayCount++;
+            }
+            for (let i = 1; i <= checkOut[2]; i++){
+                dayCount++;
+            }
+            setCount(dayCount)
         }
     }
 
     const calenderHTML = (calenderObject: MonthDateType[]) => {
         let calenderDate = [];
         let rows = [];
+
         for (let i = 0; i <= calenderObject.length - 1; i++) {
             if (i === 0) {
                 for (let j = 0; j < calenderObject[0].day; j++) {
                     rows.push(<td className={`td cannot day${i + 1}`} key={`empty${j + 1}`}></td>);
                 }
             }
-            calenderObject[i].reservation === 0 ?
+            calenderObject[i].reservation === 0?
                 rows.push(<td className={`td cannot day${i + 1}`} id={`cannot-day${i + 1}`}
                               key={`cannot-day${i + 1}`}>{calenderObject[i].date}</td>)
                 : rows.push(<td onClick={(e) => onClickCalenderHandler(e)} className={`td day${i + 1}`}
                                 id={`day ${isTdId} ${i + 1}`} key={`td-day${i + 1}`}>{calenderObject[i].date}</td>);
-
             if (calenderObject[i].day === 6) {
                 calenderDate.push(<tr className={`rows`} key={`rows${calenderDate.length}`}>{rows}</tr>);
                 rows = []
@@ -152,6 +180,7 @@ function CalenderModal({isSelectDay, setIsSelectDay}: props) {
             });
         }
     }
+
     return (
         <div className='calender-modal'>
             <div className={'modal-title'}>
