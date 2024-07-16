@@ -36,7 +36,7 @@ function CalenderModal({isSelectDay, setIsSelectDay}: props) {
         return (() =>{
             onAccommodationDateCount();
         });
-    }, [checkIn, checkOut])
+    }, [checkOut])
 
     React.useEffect(() => {
         setIsSelectDay(true);

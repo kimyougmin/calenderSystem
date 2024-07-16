@@ -53,13 +53,12 @@ export default function ({selectDay, selectMonth, currentMonth, nextMonth}: prop
         leftCalender = currentMonth.map((e) => {
             return {date: e.date, day: e.day, reservation: 0};
         });
-        for (let i = 0; i < nextMonth.length - 1; i++){
+
+        for (let i = 0; i <= nextMonth.length - 1; i++){
             if (nextMonth[i].date === selectDay ) {
-                for (let j = i; j < nextMonth.length - 1; j++){
+                for (let j = i; j <= nextMonth.length - 1; j++){
                     if (nextMonth[j].reservation === 0){
-                        break;
-                    }
-                    if (nextMonth[nextMonth.length - 1].reservation === 1){
+                        i--
                         break;
                     }
                     rightCalender.push({date: nextMonth[i].date, day: nextMonth[i].day, reservation: 1});
