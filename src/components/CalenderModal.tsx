@@ -8,11 +8,22 @@ import NextMont from "../utils/NextMonth";
 import MonthDateType from "../types/MonthDateType";
 import {calenderContext} from "../useContext/CalenderContext";
 import CalenderSelectDay from "../utils/CalenderSelectDay";
+import styled from "styled-components";
 
 interface props {
     isSelectDay: boolean;
     setIsSelectDay: React.Dispatch<React.SetStateAction<boolean>>
 }
+
+const SelectedTd = styled.td `
+    margin: 0;
+    padding: 0;
+    width: 37px;
+    height: 37px;
+    border-radius: 50px;
+    background: black;
+    color: white;
+`;
 
 function CalenderModal({isSelectDay, setIsSelectDay}: props) {
     const currentDay = CurrentDay();
@@ -90,15 +101,16 @@ function CalenderModal({isSelectDay, setIsSelectDay}: props) {
                     rows.push(<td className={`td cannot day${i + 1}`} key={`empty${j + 1}`}></td>);
                 }
             }
-            calenderObject[i].reservation === 0?
-                rows.push(<td className={`td cannot day${i + 1}`} id={`cannot-day${i + 1}`}
-                              key={`cannot-day${i + 1}`}>{calenderObject[i].date}</td>)
-                : rows.push(<td onClick={(e) => onClickCalenderHandler(e)} className={`td day${i + 1}`}
-                                id={`day ${isTdId} ${i + 1}`} key={`td-day${i + 1}`}>{calenderObject[i].date}</td>);
+            if (calenderObject[i].reservation === 0) {
+                rows.push(<td className={`td cannot day${i + 1}`} id={`cannot-day${i + 1}`} key={`cannot-day${i + 1}`}>{calenderObject[i].date}</td>);
+            } else {
+                rows.push(<td onClick={(e) => onClickCalenderHandler(e)} className={`td day${i + 1}`} id={`day ${isTdId} ${i + 1}`} key={`td-day${i + 1}`}>{calenderObject[i].date}</td>);
+            }
             if (calenderObject[i].day === 6) {
                 calenderDate.push(<tr className={`rows`} key={`rows${calenderDate.length}`}>{rows}</tr>);
                 rows = []
             }
+
             if (i === calenderObject.length - 1) {
                 calenderDate.push(<tr className={`rows`} key={`rows${calenderDate.length}`}>{rows}</tr>);
             }
