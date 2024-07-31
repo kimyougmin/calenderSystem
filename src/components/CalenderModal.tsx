@@ -47,7 +47,20 @@ function CalenderModal({isSelectDay, setIsSelectDay}: props) {
         return (() =>{
             onAccommodationDateCount();
         });
-    }, [checkOut])
+    }, [checkOut]);
+
+    React.useEffect(() => {
+        setCurrentCalenderObject(CalenderObject({
+            year: beforeMonth.year,
+            month: beforeMonth.month,
+            reservation: reservationDate.CurrenMonth
+        }));
+        setNextCalenderObject(CalenderObject({
+            year: nextMonth.year,
+            month: nextMonth.month,
+            reservation: reservationDate.NextMonth
+        }));
+    }, [nextMonth, beforeMonth]);
 
     React.useEffect(() => {
         setIsSelectDay(true);
