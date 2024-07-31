@@ -5,10 +5,10 @@ import CalenderObject from "../utils/CalenderObject";
 import CurrentDay from "../utils/CurrentDay";
 import TestModelReservedData from "../TextModel/TestModelReservedData";
 import NextMont from "../utils/NextMonth";
-import MonthDateType from "../types/MonthDateType";
 import {calenderContext} from "../useContext/CalenderContext";
 import CalenderSelectDay from "../utils/CalenderSelectDay";
 import styled from "styled-components";
+import MonthObjectType from "../types/MonthObjectType";
 
 interface props {
     isSelectDay: boolean;
@@ -16,8 +16,8 @@ interface props {
 }
 
 const SelectedTd = styled.td `
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
     width: 37px;
     height: 37px;
     border-radius: 50px;
@@ -30,16 +30,24 @@ function CalenderModal({isSelectDay, setIsSelectDay}: props) {
     const [beforeMonth, setBeforeMonth] = React.useState(currentDay);
     const [nextMonth, setNextMonth] = React.useState(NextMont());
     const reservationDate = TestModelReservedData();
-    const [currentCalenderObject, setCurrentCalenderObject] = React.useState(CalenderObject({
-        year: beforeMonth.year,
-        month: beforeMonth.month,
-        reservation: reservationDate.CurrenMonth
-    }));
-    const [nextCalenderObject, setNextCalenderObject] = React.useState(CalenderObject({
+    const [currentCalenderObject, setCurrentCalenderObject] = React.useState<MonthObjectType>({
+            year: beforeMonth.year,
+            month: beforeMonth.month,
+            MonthDataType: CalenderObject({
+                year: beforeMonth.year,
+                month: beforeMonth.month,
+                reservation: reservationDate.CurrenMonth
+            })
+    });
+    const [nextCalenderObject, setNextCalenderObject] = React.useState<MonthObjectType>({
         year: nextMonth.year,
         month: nextMonth.month,
-        reservation: reservationDate.NextMonth
-    }));
+        MonthDataType: CalenderObject({
+            year: nextMonth.year,
+            month: nextMonth.month,
+            reservation: reservationDate.NextMonth
+        })
+    });
     const {setIsModal, checkIn, setCheckIn, checkOut, setCheckOut, setCount} = React.useContext(calenderContext);
     let isTdId = true;
 
@@ -50,16 +58,24 @@ function CalenderModal({isSelectDay, setIsSelectDay}: props) {
     }, [checkOut]);
 
     React.useEffect(() => {
-        setCurrentCalenderObject(CalenderObject({
+        setCurrentCalenderObject({
             year: beforeMonth.year,
             month: beforeMonth.month,
-            reservation: reservationDate.CurrenMonth
-        }));
-        setNextCalenderObject(CalenderObject({
+            MonthDataType: CalenderObject({
+                year: beforeMonth.year,
+                month: beforeMonth.month,
+                reservation: reservationDate.CurrenMonth
+            })
+        });
+        setNextCalenderObject({
             year: nextMonth.year,
             month: nextMonth.month,
-            reservation: reservationDate.NextMonth
-        }));
+            MonthDataType: CalenderObject({
+                year: nextMonth.year,
+                month: nextMonth.month,
+                reservation: reservationDate.NextMonth
+            })
+        });
     }, [nextMonth, beforeMonth]);
 
     React.useEffect(() => {
@@ -70,13 +86,13 @@ function CalenderModal({isSelectDay, setIsSelectDay}: props) {
     const onClickCalenderHandler = (e: React.MouseEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
         const getId = target.id.split(' ');
-        const calenderSelectDay = CalenderSelectDay({selectDay: Number(getId[2]), selectMonth: getId[1], currentMonth : currentCalenderObject, nextMonth: nextCalenderObject});
+        const calenderSelectDay = CalenderSelectDay({selectDay: Number(getId[2]), selectMonth: getId[1], currentMonth : currentCalenderObject.MonthDataType, nextMonth: nextCalenderObject.MonthDataType});
         if (isSelectDay) {
             getId[1] === 'true' ?
                 setCheckIn([beforeMonth.year, beforeMonth.month, Number(getId[2])]) :
                 setCheckIn([nextMonth.year, nextMonth.month, Number(getId[2])]);
-            setCurrentCalenderObject(calenderSelectDay.leftCalender);
-            setNextCalenderObject(calenderSelectDay.rightCalender);
+            setCurrentCalenderObject({year: currentCalenderObject.year, month: currentCalenderObject.month, MonthDataType: calenderSelectDay.leftCalender});
+            setNextCalenderObject({year: nextCalenderObject.year, month: nextCalenderObject.month, MonthDataType: calenderSelectDay.rightCalender});
             setIsSelectDay(!isSelectDay);
         } else {
             getId[1] === 'true' ?
@@ -94,7 +110,7 @@ function CalenderModal({isSelectDay, setIsSelectDay}: props) {
             }
             setCount(dayCount)
         } else {
-            for (let i = checkIn[2]; i <= currentCalenderObject.length; i++) {
+            for (let i = checkIn[2]; i <= currentCalenderObject.MonthDataType.length; i++) {
                 dayCount++;
             }
             for (let i = 1; i <= checkOut[2]; i++){
@@ -104,27 +120,31 @@ function CalenderModal({isSelectDay, setIsSelectDay}: props) {
         }
     }
 
-    const calenderHTML = (calenderObject: MonthDateType[]) => {
+    const calenderHTML = (calenderObject: MonthObjectType, isMonth: boolean) => {
         let calenderDate = [];
         let rows = [];
 
-        for (let i = 0; i <= calenderObject.length - 1; i++) {
+        for (let i = 0; i <= calenderObject.MonthDataType.length - 1; i++) {
             if (i === 0) {
-                for (let j = 0; j < calenderObject[0].day; j++) {
+                for (let j = 0; j < calenderObject.MonthDataType[0].day; j++) {
                     rows.push(<td className={`td cannot day${i + 1}`} key={`empty${j + 1}`}></td>);
                 }
             }
-            if (calenderObject[i].reservation === 0) {
-                rows.push(<td className={`td cannot day${i + 1}`} id={`cannot-day${i + 1}`} key={`cannot-day${i + 1}`}>{calenderObject[i].date}</td>);
+            if (calenderObject.MonthDataType[i].reservation === 0) {
+                rows.push(<td className={`td cannot day${i + 1}`} id={`cannot-day${i + 1}`} key={`cannot-day${i + 1}`}>{calenderObject.MonthDataType[i].date}</td>);
             } else {
-                rows.push(<td onClick={(e) => onClickCalenderHandler(e)} className={`td day${i + 1}`} id={`day ${isTdId} ${i + 1}`} key={`td-day${i + 1}`}>{calenderObject[i].date}</td>);
+                if ((checkIn[0] === calenderObject.year && checkIn[1] === calenderObject.month && i+1 === checkIn[2]) || (checkOut[0] === calenderObject.year && checkOut[1] === calenderObject.month && i+1 === checkOut[2])) {
+                    rows.push(<SelectedTd onClick={(e) => onClickCalenderHandler(e)} className={`td day${i + 1}`} id={`day ${isTdId} ${i + 1}`} key={`td-day${i + 1}`}>{calenderObject.MonthDataType[i].date}</SelectedTd>)
+                } else {
+                    rows.push(<td onClick={(e) => onClickCalenderHandler(e)} className={`td day${i + 1}`} id={`day ${isTdId} ${i + 1}`} key={`td-day${i + 1}`}>{calenderObject.MonthDataType[i].date}</td>)
+                }
             }
-            if (calenderObject[i].day === 6) {
+            if (calenderObject.MonthDataType[i].day === 6) {
                 calenderDate.push(<tr className={`rows`} key={`rows${calenderDate.length}`}>{rows}</tr>);
                 rows = []
             }
 
-            if (i === calenderObject.length - 1) {
+            if (i === calenderObject.MonthDataType.length - 1) {
                 calenderDate.push(<tr className={`rows`} key={`rows${calenderDate.length}`}>{rows}</tr>);
             }
         }
@@ -232,7 +252,7 @@ function CalenderModal({isSelectDay, setIsSelectDay}: props) {
                             <td>금</td>
                             <td>토</td>
                         </tr>
-                        {calenderHTML(currentCalenderObject).map((e) => {
+                        {calenderHTML(currentCalenderObject, true).map((e) => {
                             return e
                         })}
                         </tbody>
@@ -255,7 +275,7 @@ function CalenderModal({isSelectDay, setIsSelectDay}: props) {
                             <td>금</td>
                             <td>토</td>
                         </tr>
-                        {calenderHTML(nextCalenderObject).map((e) => {
+                        {calenderHTML(nextCalenderObject, false).map((e) => {
                             return e
                         })}
                         </tbody>
